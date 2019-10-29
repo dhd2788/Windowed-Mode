@@ -9,12 +9,10 @@ For now we are expecting the user to have their webcam at the top and center of 
 | Week Numbers | Objectives |
 | --- | --- |
 | 4 | Project planning |
-| 5 - 7 | Dara builds ray tracer and Caleb implements head tracking |
-| 8 | Combine Dara's and Caleb's implementation into a single working project |
-| 9 | Implement basic object interaction (press spacebar to pick up/drop) |
-| 10 - 11 | Get object in the world to react to user's head position (ie. Stanford bunny following user's head location) | 
-| 12 | Implement "magic flashlight" |
-| 13 | Implement roaches running away when flashlight shines on them |
+| 5 - 7 | Find a library/online resource for implementation of head tracking and rasterization/ray tracing |
+| 10 | Combine Dara's and Caleb's implementation into a single working project |
+| 11 | Implement basic object interaction (press spacebar to pick up/drop) |
+| 12 - 13 | Implement "cool stuff" (magic flashlight, animals following the user's head position as though the user is being watched, roaches) |
 | 14 - 15 | Port project to website & any additional features we'd like to implement |
 | 16 | Project presentation/wrap up |
 
