@@ -54,8 +54,9 @@ def main():
                 pygame.quit()
                 quit()
 
-        glRotatef(2, 9, 2, 6)
+        glRotatef(1, 1, 2, 3)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        gluLookAt(1, 1, 1, 0, 0, 0, 0, 1, 0)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
