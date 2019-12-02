@@ -100,12 +100,19 @@ def main():
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
     i=10
+    d = -1
+    fovy = -1
+    lastfovy = -1
+    lastdist = -1
     while 1:
         ret, img = cap.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         i+= .5
         for (x, y, w, h) in faces:
+            if(fovy != -1):
+                lastdist = d
+                lastfovy = fovy
             #cv2.rectangle(img, (x, y), (x + w, y + h), (140, 69, 0), 2)
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = img[y:y + h, x:x + w]
@@ -117,9 +124,9 @@ def main():
             area = avg.__pow__(2)
 
             aspect = (display[0] / display[1])
-            fovx = (w*90/350)
+            fovx = 10 + (w*90/350)
             fovy = 2 * np.arctan(np.tan(fovx * (np.pi/180) * .5)/aspect) * (180/np.pi)
-            hw = 4
+            hw = 8.5
             d = hw / (2 * np.tan((fovx*(np.pi/180))/2))
 
             #cv2.putText(img, str(w), bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
@@ -129,7 +136,7 @@ def main():
             #gluPerspective(avg/5, (display[0] / display[1]), 0.1, 50.0)
             glLoadIdentity()
             gluPerspective(fovy, aspect, 0.1, 50.0)
-            trn = -2 + d
+            trn = 5 + d
             glTranslatef(0.0, 0.0, -trn)
 
 
