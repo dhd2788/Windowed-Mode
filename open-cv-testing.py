@@ -21,6 +21,42 @@ fontScale = 1
 fontColor = (255, 255, 255)
 lineType = 2
 
+"""
+verticesFloor = (
+    (-100, -1, 100),
+    (100,  -1, 100),
+    (100,  -1, -100),
+    (-100, -1, -100)
+)
+
+edgesFloor = (
+    (0, 1),
+    (1, 2),
+    (2, 3),
+    (3, 0)
+)
+
+surfacesFloor = (
+    (0, 1, 2, 3),
+    (0, 1, 2, 3)
+)"""
+
+verticesFloor = (
+    (-100, -1, -100),
+    (100, -1, -100),
+    (0, -1, 3)
+)
+
+edgesFloor = (
+    (0, 1),
+    (1, 2),
+    (0, 2)
+)
+
+surfacesFloor = (
+    (0, 1, 2),
+    (0, 1, 2)
+)
 
 vertices = (
     (1, -1, -1),
@@ -70,13 +106,30 @@ edges = (
     (5,7)
     )
 
+surfaces = (
+    (0,1,2,3),
+    (3,2,7,6),
+    (6,7,5,4),
+    (4,5,1,0),
+    (1,5,7,2),
+    (4,0,3,6)
+    )
+
 
 def Cube():
+    glBegin(GL_QUADS)
+    for surface in surfaces:
+        for vertex in surface:
+            glColor3fv((0,1,0))
+            glVertex3fv(vertices[vertex])
+    glEnd()
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
             glVertex3fv(vertices[vertex])
     glEnd()
+
 
 def Cube2():
     glBegin(GL_LINES)
@@ -90,6 +143,21 @@ def Cube3():
     for edge in edges:
         for vertex in edge:
             glVertex3fv(vertices3[vertex])
+    glEnd()
+
+
+def Floor():
+    glBegin(GL_QUADS)
+    for surface in surfacesFloor:
+        for vertex in surface:
+            glColor3fv((1, 0.5, 0))
+            glVertex3fv(verticesFloor[vertex])
+    glEnd()
+
+    glBegin(GL_LINES)
+    for edge in edgesFloor:
+        for vertex in edge:
+            glVertex3fv(verticesFloor[vertex])
     glEnd()
 
 
@@ -137,11 +205,15 @@ def main():
             glLoadIdentity()
             gluPerspective(fovy, aspect, 0.1, 50.0)
             trn = 5 + d
-            glTranslatef(0.0, 0.0, -trn)
+            #glTranslatef(0.0, 0.0, -trn)
+
+
+            gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0)
 
 
             #glRotatef(2, 9, 2, 6)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            Floor()
             Cube()
             Cube2()
             Cube3()
