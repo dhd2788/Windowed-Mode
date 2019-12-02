@@ -181,13 +181,9 @@ def main():
             if(fovy != -1):
                 lastdist = d
                 lastfovy = fovy
-            #cv2.rectangle(img, (x, y), (x + w, y + h), (140, 69, 0), 2)
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = img[y:y + h, x:x + w]
 
-            #eyes = eye_cascade.detectMultiScale(roi_gray)
-            #for (ex, ey, ew, eh) in eyes:
-            #   cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
             avg = (w + h) / 2
             area = avg.__pow__(2)
 
@@ -195,23 +191,23 @@ def main():
             fovx = 10 + (w*90/350)
             fovy = 2 * np.arctan(np.tan(fovx * (np.pi/180) * .5)/aspect) * (180/np.pi)
             hw = 8.5
-            d = hw / (2 * np.tan((fovx*(np.pi/180))/2))
 
-            #cv2.putText(img, str(w), bottomLeftCornerOfText, font, fontScale, fontColor, lineType)
-
-            #cv2.imshow('img', img)
-
-            #gluPerspective(avg/5, (display[0] / display[1]), 0.1, 50.0)
             glLoadIdentity()
+
+            # update the field of view
             gluPerspective(fovy, aspect, 0.1, 50.0)
+
+            # calculate distance from the camera
+            d = hw / (2 * np.tan((fovx*(np.pi/180))/2))
             trn = 5 + d
-            #glTranslatef(0.0, 0.0, -trn)
 
+            # calculate left-right and up-down distance
+            newX = x / 100 - 2.5
+            newY = y / 150 - 1.5
 
-            gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0)
+            # update the look at based on the user's position (position, lookat, up -> only position should change)
+            gluLookAt(-newX, -newY, trn, 0, 0, 0, 0, 1, 0)
 
-
-            #glRotatef(2, 9, 2, 6)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             Floor()
             Cube()
