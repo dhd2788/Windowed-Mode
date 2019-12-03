@@ -160,19 +160,25 @@ def main():
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
     glTranslatef(0.0, 0.0, -5)
     i=10
-    d = -1
-    fovy = -1
-    lastfovy = -1
-    lastdist = -1
+    fovx = -1
+    lastfovx = -1
     while 1:
+        if fovx != -1:
+            lastfovx = fovx
+
         ret, img = cap.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
         i+= .5
         for (x, y, w, h) in faces:
-            if(fovy != -1):
-                lastdist = d
-                lastfovy = fovy
+            fovx = 10 + (w * 90 / 350)
+            if lastfovx != -1:
+                dif = np.abs((fovx - lastfovx)) / 5
+                if dif < 1:
+                    if fovx < lastfovx:
+                        fovx = lastfovx - (dif * dif * 5)
+                    else:
+                        fovx = lastfovx + (dif * dif * 5)
             roi_gray = gray[y:y + h, x:x + w]
             roi_color = img[y:y + h, x:x + w]
 
@@ -180,7 +186,6 @@ def main():
             area = avg.__pow__(2)
 
             aspect = (display[0] / display[1])
-            fovx = 10 + (w*90/350)
             fovy = 2 * np.arctan(np.tan(fovx * (np.pi/180) * .5)/aspect) * (180/np.pi)
             hw = 8.5
 
@@ -195,15 +200,15 @@ def main():
 
             # calculate left-right and up-down distance
             centerX = 330
-            scaleX = 35  # higher = moves slower
+            scaleX = 90  # higher = moves slower
             newX = (x + w/2) / scaleX - (centerX / scaleX)  # centered about 330
 
             centerY = 235
-            scaleY = 70
+            scaleY = 140
             newY = (y + h/2) / scaleY - (centerY / scaleY)  # centered about 235???
 
             # update the look at based on the user's position (position, lookat, up -> only position should change)
-            gluLookAt(-newX, -newY, trn, 0, 0, -2, 0, 1, 0)
+            gluLookAt(-newX, -newY, trn, newX/6, newY/6, 2, 0, 1, 0)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             Floor()
