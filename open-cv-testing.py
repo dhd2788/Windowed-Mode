@@ -21,7 +21,7 @@ fontScale = 1
 fontColor = (255, 255, 255)
 lineType = 2
 
-"""
+""" old floor
 verticesFloor = (
     (-100, -1, 100),
     (100,  -1, 100),
@@ -67,52 +67,30 @@ vertices = (
     (1, 1, 1),
     (-1, -1, 1),
     (-1, 1, 1)
-    )
-
-vertices2 = (
-    (-2, -1, -1),
-    (-2, 1, -1),
-    (-4, 1, -1),
-    (-4, -1, -1),
-    (-2, -1, 1),
-    (-2, 1, 1),
-    (-4, -1, 1),
-    (-4, 1, 1)
-    )
-
-vertices3 = (
-    (4, -1, -1),
-    (4, 1, -1),
-    (2, 1, -1),
-    (2, -1, -1),
-    (4, -1, 1),
-    (4, 1, 1),
-    (2, -1, 1),
-    (2, 1, 1)
-    )
+)
 
 edges = (
-    (0,1),
-    (0,3),
-    (0,4),
-    (2,1),
-    (2,3),
-    (2,7),
-    (6,3),
-    (6,4),
-    (6,7),
-    (5,1),
-    (5,4),
-    (5,7)
+    (0, 1),
+    (0, 3),
+    (0, 4),
+    (2, 1),
+    (2, 3),
+    (2, 7),
+    (6, 3),
+    (6, 4),
+    (6, 7),
+    (5, 1),
+    (5, 4),
+    (5, 7)
     )
 
 surfaces = (
-    (0,1,2,3),
-    (3,2,7,6),
-    (6,7,5,4),
-    (4,5,1,0),
-    (1,5,7,2),
-    (4,0,3,6)
+    (0, 1, 2, 3),
+    (3, 2, 7, 6),
+    (6, 7, 5, 4),
+    (4, 5, 1, 0),
+    (1, 5, 7, 2),
+    (4, 0, 3, 6)
     )
 
 
@@ -132,17 +110,31 @@ def Cube():
 
 
 def Cube2():
+    glBegin(GL_QUADS)
+    for surface in surfaces:
+        for vertex in surface:
+            glColor3fv((1,0,0))
+            glVertex3fv((vertices[vertex][0]-3, vertices[vertex][1], vertices[vertex][2]))
+    glEnd()
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
-            glVertex3fv(vertices2[vertex])
+            glVertex3fv((vertices[vertex][0]-3, vertices[vertex][1], vertices[vertex][2]))
     glEnd()
 
 def Cube3():
+    glBegin(GL_QUADS)
+    for surface in surfaces:
+        for vertex in surface:
+            glColor3fv((0, 0, 1))
+            glVertex3fv((vertices[vertex][0]+3, vertices[vertex][1], vertices[vertex][2]))
+    glEnd()
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
-            glVertex3fv(vertices3[vertex])
+            glVertex3fv((vertices[vertex][0]+3, vertices[vertex][1], vertices[vertex][2]))
     glEnd()
 
 
@@ -199,14 +191,19 @@ def main():
 
             # calculate distance from the camera
             d = hw / (2 * np.tan((fovx*(np.pi/180))/2))
-            trn = 5 + d
+            trn = 6 + d
 
             # calculate left-right and up-down distance
-            newX = x / 100 - 2.5
-            newY = y / 150 - 1.5
+            centerX = 330
+            scaleX = 35  # higher = moves slower
+            newX = (x + w/2) / scaleX - (centerX / scaleX)  # centered about 330
+
+            centerY = 235
+            scaleY = 70
+            newY = (y + h/2) / scaleY - (centerY / scaleY)  # centered about 235???
 
             # update the look at based on the user's position (position, lookat, up -> only position should change)
-            gluLookAt(-newX, -newY, trn, 0, 0, 0, 0, 1, 0)
+            gluLookAt(-newX, -newY, trn, 0, 0, -2, 0, 1, 0)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
             Floor()
